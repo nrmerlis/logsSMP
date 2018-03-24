@@ -1,16 +1,18 @@
 #include "log.h";
 
+t_log * log_file;
+
 
 int main(void)
 {
 
+t_log * logF=log_new("tp0");
 
 
-log_new("tp0");
 
-log_write(0,"holi");
+log_write(logF,TRACE,"Hold");
 
-log_write(2,"caca");
+log_write(logF,WARNING,"caca");
 
 log_print();
 
@@ -18,37 +20,39 @@ log_print();
 }
 
 
-void log_new(char * log_name)
+t_log* log_new(char * log_name)
 {
-	log_file = log_create(log_data,log_name,1,0);
+	t_log* nl;
+	nl = log_create(log_name,log_name,1,0);
+	return nl;
 
 }
 
-void log_write(int msg_type,const char * msg)
+void log_write(t_log * log_file,int msg_type,const char * msg)
 {
 	switch (msg_type)
 	{
-	case 0:
+	case TRACE:
 		{
 			log_trace(log_file,msg);
 			break;
 		}
-	case 1:
+	case DEBUG:
 		{
 			log_debug(log_file,msg);
 			break;
 		}
-	case 2:
+	case INFO:
 		{
 			log_info(log_file,msg);
 			break;
 		}
-	case 3:
+	case WARNING:
 		{
 			log_warning(log_file,msg);
 			break;
 		}
-	case 4:
+	case ERROR:
 		{
 			log_error(log_file,msg);
 			break;
@@ -58,7 +62,7 @@ void log_write(int msg_type,const char * msg)
 	}
 }
 
-void log_print()
+void log_print(t_log* log_file)
 {
 	printf("%s",log_file->file);
 }
